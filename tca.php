@@ -77,6 +77,7 @@ $TCA["tx_euldap_server"] = Array (
 					Array("LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.servertype.I.1", "1"),
 					Array("LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.servertype.I.2", "2"),
 					Array("LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.servertype.I.3", "3"),
+					Array("LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.servertype.I.4", "4"),
 				),
 			)
 		),

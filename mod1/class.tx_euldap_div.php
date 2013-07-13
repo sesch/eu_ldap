@@ -149,7 +149,7 @@ class tx_euldap_div {
 			if (!($connect = @ldap_connect($server, $port))) die('Could not connect to ldap server '.$server);
 			if ($version == 3) {
 				@ldap_set_option($connect, LDAP_OPT_PROTOCOL_VERSION, 3);
-				if ($servertype == 1) ldap_set_option($connect, LDAP_OPT_REFERRALS, 0);
+				if ($servertype == 1 || $servertype == 4) ldap_set_option($connect, LDAP_OPT_REFERRALS, 0);
 			}
 			if (substr(strtolower($server), 0, 8) == 'ldaps://') {
 				if (!function_exists( 'ldap_start_tls' )) die('Function ldap_start_tls not available.');
@@ -289,6 +289,9 @@ class tx_euldap_div {
 				break;
 			case 3:
 				$use_memberOf = 'posixgroup';
+				break;
+			case 4:
+				$use_memberOf = 'memberof';
 				break;
 		}
 
@@ -661,6 +664,9 @@ class tx_euldap_div {
 			case 3:
 				$username = $user[$ldapusername];
 				break;
+			case 4:
+				$username = $user['userdom'];
+				break;
 		}
 
 		$name = $user[$ldapname];
@@ -802,6 +808,10 @@ class tx_euldap_div {
 			case 2:
 			case 3:
 				$username = $user[$ldapusername];
+				break;
+			case 4:
+				$username = $user['userdom'];
+				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('import_singleuser::username: ' . $username, 'eu_ldap', 0);
 				break;
 		}
 		$query = (($pid)?'pid ='.$pid.' AND ':'')."NOT deleted AND lower(username) = '".$GLOBALS['TYPO3_DB']->quoteStr(strtolower($username), $user_table)."'";
@@ -947,6 +957,7 @@ class tx_euldap_div {
 		$this->remoteChar = $this->csObj->parse_charset($server_info['characterset']);
 		$username = $this->csObj->conv($username, $this->localChar, $this->remoteChar);
 		$username = tx_euldap_div::sanitizeCredentials($username);
+		$usershortname =  $username;
 		$password = $this->csObj->conv($password, $this->localChar, $this->remoteChar);
 		$password = tx_euldap_div::sanitizeCredentials($password);
 		
@@ -970,7 +981,7 @@ class tx_euldap_div {
 			if ($this->conf['logLevel'] == 2) t3lib_div::devLog('connect successful: '.$server.':'.$ldapport, 'eu_ldap', -1);
 			if ($version == 3) ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
 			if ($this->conf['logLevel'] == 2) t3lib_div::devLog('server type: '.$servertype, 'eu_ldap', 0);
-			if ($servertype > 1) {
+			if ($servertype == 2 || $servertype == 3) {
 				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('try to bind: '.$cuser.' / '.$cpass, 'eu_ldap', 0);
 				$r = @ldap_bind($ds, $cuser, $cpass);
 				if ($r) {
@@ -985,8 +996,10 @@ class tx_euldap_div {
 			} elseif ($domain) {
 				if ($servertype == 0) {
 					$username = $domain."\\".$username;
-				} else {
+				} elseif ($servertype == 1 ) {
 					$username = $username."@".$domain;
+				} elseif ($servertype == 4 ) {
+					$username = $username.".".$domain;
 				}
 			}
 			
@@ -999,7 +1012,25 @@ class tx_euldap_div {
 					
 					$arrUser = tx_euldap_div::search($ds, $base_dn, $filter, array(), 'sub', true, LDAP_DEREF_NEVER, 1);
 					$user = $arrUser[0];
-					
+					if ( $servertype == 4 ) {
+					// fake: save login name
+					$user['userdom'] = $usershortname;
+					switch($user['primarygroupid'][0]) {
+						case 512:
+							$user['memberof'][] = 'cn=Domain Admins,ou=Users,';
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							break;
+						case 513:
+							$user['memberof'][] = 'cn=Domain Users,ou=Users,';
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							break;
+						case 514:
+							$user['memberof'][] = 'cn=Domain Guests,ou=Users,';
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							break;
+						}
+					}
+
 					// convert character set remote -> local
 					if (is_array($user)) $user = tx_euldap_div::convertArray($user, $this->remoteChar, $this->localChar);
 					
