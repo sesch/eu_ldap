@@ -393,6 +393,7 @@ class tx_euldap_div {
 				if (is_array($ldapres[$memberOf])) {
 					while ($k < count($ldapres[$memberOf])) {
 						$department = $ldapres[$memberOf][$k];
+//+++ resolve groups recursive +++//
 						$equal = strpos($department, 'cn=');
 						$comma = strpos($department, ',', $equal);
 						$department = substr($department, $equal+3, $comma-$equal-3);
