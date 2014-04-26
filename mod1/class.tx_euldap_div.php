@@ -324,7 +324,7 @@ class tx_euldap_div {
 			if (preg_match($regExpr, strtolower($groupname))) $retValue = 1;
 		}
 		
-		if (($retValue == 0) && ($this->conf['logLevel'] == 2)) t3lib_utility_Debug::debug('tx_euldap_div:is_in_onlygroups() | filtered out: '.$groupname, 'eu_ldap', 0);
+		if (($retValue == 0) && ($this->conf['logLevel'] == 2)) t3lib_div::devLog('tx_euldap_div:is_in_onlygroups() | filtered out: '.$groupname, 'eu_ldap', 0);
 		
 		return $retValue;
 	}
@@ -395,20 +395,20 @@ class tx_euldap_div {
 						$department = $ldapres[$memberOf][$k];
 						//+++ resolve groups recursive +++//
 						// >--- 2014-04-26/wob: indirekte Gruppenmitgliedschaften ---
-						if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('assign_group::department ' . $department, 'eu_ldap', 0);
+						if ($this->conf['logLevel'] == 2) t3lib_div::devLog('assign_group::department ' . $department, 'eu_ldap', 0);
 						$department = strtr($department, "\+", "__");
 						// falls department selbst wieder eine Gruppe ist:
 						// Gruppe nach memberOf aufloesen, memberOfs an $ldapres[memberOf] anhaengen
 						// hier weiter mit der urspruenglichen Gruppe
 						/* change the filterstring for searching groups */
-						$Server['filter'] = "(&(objectclass=group)(distinguishedName=<search>))";
+						$server['filter'] = "(&(objectclass=group)(distinguishedName=<search>))";
 					 	// Achtung: tx_euldap_div::search_ldap verwendet fuer die Bind-Operation den User aus der Konfiguration!
 						$group_info = tx_euldap_div::search_ldap($server, $department);
 						$groupies = $group_info[0];
 						if ($this->conf['logLevel'] == 2) {
 							$anz = count($groupies[$memberOf]);
 							for ($i=0; $i<$anz; $i++) {
-								t3lib_utility_Debug::debug('assign_group::groups ' . $i . ':' . $groupies[$memberOf][$i], 'eu_ldap', 0);
+								t3lib_div::devLog('assign_group::groups ' . $i . ':' . $groupies[$memberOf][$i], 'eu_ldap', 0);
 							}
 						}
 						// php5: array_merge akzeptiert nur noch arrays! 2007-09-11/wob
@@ -554,8 +554,8 @@ class tx_euldap_div {
 		if ($gname) $gname = substr($gname, 1);
 		
 		if ($this->conf['logLevel'] == 2) {
-			t3lib_utility_Debug::debug('tx_euldap_div:assign_groups() | names: '.$gname, 'eu_ldap', 0);
-			t3lib_utility_Debug::debug('tx_euldap_div:assign_groups() | uids: '.$gid, 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:assign_groups() | names: '.$gname, 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:assign_groups() | uids: '.$gid, 'eu_ldap', 0);
 		}
 	}
 
@@ -603,7 +603,7 @@ class tx_euldap_div {
 				
 				if(!$row) {
 					$dbres = $GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $qry);
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('tx_euldap_div:insert_newgrps() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($table, $query), 'eu_ldap', 0);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('tx_euldap_div:insert_newgrps() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($table, $query), 'eu_ldap', 0);
 					$rslt = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 						'uid, title',
 						$table,
@@ -723,8 +723,8 @@ class tx_euldap_div {
 			
 			if ($this->conf['logLevel'] == 2) {
 				$sql = $GLOBALS['TYPO3_DB']->SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
-				t3lib_utility_Debug::debug('tx_euldap_div:update_singleuser() | preserve groups: '.$sql, 'eu_ldap', 0);
-				t3lib_utility_Debug::debug('tx_euldap_div:update_singleuser() | preserve groups: '.$gid, 'eu_ldap', 0);
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$sql, 'eu_ldap', 0);
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$gid, 'eu_ldap', 0);
 			}
 			
 			if ($user_table == 'fe_users') {
@@ -758,7 +758,7 @@ class tx_euldap_div {
 			
 			if ($this->conf['logLevel'] == 2) {
 				$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
-				t3lib_utility_Debug::debug('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
 			}
 			
 			$arrDisplay['name'] = $name;
@@ -837,7 +837,7 @@ class tx_euldap_div {
 				break;
 			case 4:
 				$username = $user['userdom'];
-				if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('import_singleuser::username: ' . $username, 'eu_ldap', 0);
+				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('import_singleuser::username: ' . $username, 'eu_ldap', 0);
 				break;
 		}
 		$query = (($pid)?'pid ='.$pid.' AND ':'')."NOT deleted AND lower(username) = '".$GLOBALS['TYPO3_DB']->quoteStr(strtolower($username), $user_table)."'";
@@ -845,8 +845,8 @@ class tx_euldap_div {
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		
 		if ($this->conf['logLevel'] == 2) {
-			t3lib_utility_Debug::debug('tx_euldap_div:import_singleuser() | select: '.$GLOBALS['TYPO3_DB']->SELECTquery('email', $user_table, $query), 'eu_ldap', 0);
-			t3lib_utility_Debug::debug('tx_euldap_div:import_singleuser() | user found: '.is_array($row), 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:import_singleuser() | select: '.$GLOBALS['TYPO3_DB']->SELECTquery('email', $user_table, $query), 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:import_singleuser() | user found: '.is_array($row), 'eu_ldap', 0);
 		}
 		
 		if (!is_array($row) && ($username != '')) {
@@ -911,7 +911,7 @@ class tx_euldap_div {
 					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);			
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery($user_table, $insValues);
 					
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('tx_euldap_div:import_singleuser() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($user_table, $insValues), 'eu_ldap', 0);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('tx_euldap_div:import_singleuser() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($user_table, $insValues), 'eu_ldap', 0);
 				}
 			}
 		} elseif ($username !='') {
@@ -1002,21 +1002,21 @@ class tx_euldap_div {
 		if(!extension_loaded('ldap')) die('Your PHP version seems to lack LDAP support. Please install.');
 
 		$ds = @ldap_connect($server, $ldapport);
-		if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('try to connect: '.$server.':'.$ldapport, 'eu_ldap', 0);
+		if ($this->conf['logLevel'] == 2) t3lib_div::devLog('try to connect: '.$server.':'.$ldapport, 'eu_ldap', 0);
 		if ($ds) {
-			if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('connect successful: '.$server.':'.$ldapport, 'eu_ldap', -1);
+			if ($this->conf['logLevel'] == 2) t3lib_div::devLog('connect successful: '.$server.':'.$ldapport, 'eu_ldap', -1);
 			if ($version == 3) ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-			if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('server type: '.$servertype, 'eu_ldap', 0);
+			if ($this->conf['logLevel'] == 2) t3lib_div::devLog('server type: '.$servertype, 'eu_ldap', 0);
 			if ($servertype == 2 || $servertype == 3) {
-				if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('try to bind: '.$cuser.' / '.$cpass, 'eu_ldap', 0);
+				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('try to bind: '.$cuser.' / '.$cpass, 'eu_ldap', 0);
 				$r = @ldap_bind($ds, $cuser, $cpass);
 				if ($r) {
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('bind successful', 'eu_ldap', -1);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('bind successful', 'eu_ldap', -1);
 					$dn = @ldap_search($ds, $base_dn, $filter);
 					$dn = @ldap_get_entries($ds, $dn);
 					$username = $dn[0]['dn'];
 				} else {
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('bind failed', 'eu_ldap', 2);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('bind failed', 'eu_ldap', 2);
 					$username = null;
 				}
 			} elseif ($domain) {
@@ -1031,10 +1031,10 @@ class tx_euldap_div {
 			
 			if ($username && $password) {
 				@ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
-				if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('try to bind: '.$username.' / '.$password, 'eu_ldap', 0);
+				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('try to bind: '.$username.' / '.$password, 'eu_ldap', 0);
 				$r = @ldap_bind($ds,$username,$password);
 				if ($r) {
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('bind successful', 'eu_ldap', -1);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('bind successful', 'eu_ldap', -1);
 					
 					$arrUser = tx_euldap_div::search($ds, $base_dn, $filter, array(), 'sub', true, LDAP_DEREF_NEVER, 1);
 					$user = $arrUser[0];
@@ -1044,15 +1044,15 @@ class tx_euldap_div {
 					switch($user['primarygroupid'][0]) {
 						case 512:
 							$user['memberof'][] = 'cn=Domain Admins,ou=Users,';
-							if ($this->conf['logLevel'] == 1) t3lib_utility_Debug::debug('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
 							break;
 						case 513:
 							$user['memberof'][] = 'cn=Domain Users,ou=Users,';
-							if ($this->conf['logLevel'] == 1) t3lib_utility_Debug::debug('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
 							break;
 						case 514:
 							$user['memberof'][] = 'cn=Domain Guests,ou=Users,';
-							if ($this->conf['logLevel'] == 1) t3lib_utility_Debug::debug('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
+							if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checkNTUser::memberOf++: cn=Domain Users', 'eu_ldap', 0);
 							break;
 						}
 					}
@@ -1062,7 +1062,7 @@ class tx_euldap_div {
 					
 					return $user;
 				} else {
-					if ($this->conf['logLevel'] == 2) t3lib_utility_Debug::debug('bind failed', 'eu_ldap', 2);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('bind failed', 'eu_ldap', 2);
 				}
 			}
 		}
