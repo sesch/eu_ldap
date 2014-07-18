@@ -95,6 +95,7 @@
             <label index="tx_euldap_server.username">LDAP attribute holding login name (account)</label>
             <label index="tx_euldap_server.phone">LDAP attribute holding the telephone number</label>
             <label index="tx_euldap_server.mail">LDAP attribute holding the email address</label>
+            <label index="tx_euldap_server.be_import_default_password">Default password for imported backend users</label>
             <label index="tx_euldap_server.ldapversion">LDAP version</label>
             <label index="tx_euldap_server.ldapversion.I.0">2</label>
             <label index="tx_euldap_server.ldapversion.I.1">3</label>
@@ -156,6 +157,7 @@
             <label index="tx_euldap_server.user">Benutzer</label>
             <label index="tx_euldap_server.password">Kennwort</label>
             <label index="tx_euldap_server.filter">Filter</label>
+            <label index="tx_euldap_server.be_import_default_password">Standardpasswort für importierte Backend-User</label>
             <label index="tx_euldap_server.build_group">Herleitung der Benutzergruppe (wenn nicht die Standardimplementierung verwendet wird)</label>
             <label index="tx_euldap_server.memberof">Standard verwenden, um Benutzer zu Gruppen zuzuordnen - person:memberOf (AD) / person:groupMembership (NDS) / posixGroup:memberUid (OpenLDAP)</label>
             <label index="tx_euldap_server.only_emailusers">Nur Benutzer mit e-Mail Adresse importieren</label>

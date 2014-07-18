@@ -810,6 +810,8 @@ class tx_euldap_div {
 		$ldapcity = $server['city'];
 		$ldapcountry = $server['country'];
 		$ldapwww = $server['www'];
+        $be_default_password = $server["be_import_default_password"];
+
 		if ($this->importGroups) {
 			$ldapbuildgroup = $server['build_group'];
 			$use_memberOf = $server['memberof'];
@@ -884,6 +886,11 @@ class tx_euldap_div {
 						$rand_num = round(rand(1, 26) + 97, 0);
 						$password.= chr($rand_num);
 					}
+
+                    //Use configured default password if existing
+                    if($user_table == "be_users" && $be_default_password != null && $be_default_password != ""){
+                        $password = $be_default_password;
+                    }
 					$insValues=array('crdate' => time(),
 						'tstamp' => time(),
 						'pid' => $pid,

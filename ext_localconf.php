@@ -37,4 +37,9 @@ if ($config['enableFE'] || $config['enableBE']) {
 	);
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_euldap_import'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Import LDAP users',
+    'description'      => 'Task to import LDAP users.'
+);
 ?>

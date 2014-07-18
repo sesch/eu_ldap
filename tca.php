@@ -305,6 +305,15 @@ $TCA["tx_euldap_server"] = Array (
 				'maxitems' => 10,
 			)
 		),
+        'be_import_default_password' => Array (
+            "exclude" => 0,
+            "label" => "LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.be_import_default_password",
+            "config" => Array (
+                "type" => "input",
+                "size" => "30",
+                "eval" => "trim",
+            )
+        ),
 		'feuser_pid' => Array (		
 			'l10n_mode' => 'exclude',
 			'exclude' => 1,	
@@ -331,7 +340,7 @@ $TCA["tx_euldap_server"] = Array (
 	),
 	"types" => array(
 		"0" => array(
-			"showitem" => "--div--;Server, server, port, version, characterset, base_dn, filter, servertype, domain, user, password, --div--;Settings, automatic_import, only_emailusers, authenticate_be, feuser_pid, timestamp, --div--;Attributes, username, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group"
+			"showitem" => "--div--;Server, server, port, version, characterset, base_dn, filter, servertype, domain, user, password, --div--;Settings, automatic_import, only_emailusers, authenticate_be, feuser_pid, timestamp, --div--;Attributes, username, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group, be_import_default_password"
 		)
 	)
 );
