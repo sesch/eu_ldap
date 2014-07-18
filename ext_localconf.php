@@ -20,22 +20,22 @@ if ($config['enableFE'] && $config['enableBE']) {
 }
 
 // register Service with highest priority
-if ($config['enableFE'] || $config['enableBE']) {
-	t3lib_extMgm::addService($_EXTKEY,  'auth' /* sv type */,  'tx_euldap_sv1' /* sv key */,
-		array(
-			'title' => 'LDAP-Authentication',
-			'description' => 'Authentication service for LDAP (FE and BE).',
-			'subtype' => $subTypes,
-			'available' => 1,
-			'priority' => 100,
-			'quality' => 50,
-			'os' => '',
-			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_euldap_sv1.php',
-			'className' => 'tx_euldap_sv1',
-		)
-	);
-}
+//if ($config['enableFE'] || $config['enableBE']) {
+//	t3lib_extMgm::addService($_EXTKEY,  'auth' /* sv type */,  'tx_euldap_sv1' /* sv key */,
+//		array(
+//			'title' => 'LDAP-Authentication',
+//			'description' => 'Authentication service for LDAP (FE and BE).',
+//			'subtype' => $subTypes,
+//			'available' => 1,
+//			'priority' => 100,
+//			'quality' => 50,
+//			'os' => '',
+//			'exec' => '',
+//			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_euldap_sv1.php',
+//			'className' => 'tx_euldap_sv1',
+//		)
+//	);
+//}
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_euldap_import'] = array(
     'extension'        => $_EXTKEY,
