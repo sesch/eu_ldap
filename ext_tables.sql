@@ -37,6 +37,7 @@ CREATE TABLE tx_euldap_server (
 	timestamp varchar(255) DEFAULT 'logintime' NOT NULL,
 	map_additional_fields text,
 	be_import_default_password varchar(255) DEFAULT '' NOT NULL,
+	be_imported_set_admin tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	fe_group varchar(255) DEFAULT '' NOT NULL,
 	be_group varchar(255) DEFAULT '' NOT NULL,
 	feuser_pid int(11) unsigned DEFAULT '0' NOT NULL,

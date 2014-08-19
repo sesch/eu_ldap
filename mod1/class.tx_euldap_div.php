@@ -811,6 +811,11 @@ class tx_euldap_div {
 		$ldapcountry = $server['country'];
 		$ldapwww = $server['www'];
         $be_default_password = $server["be_import_default_password"];
+        $be_set_admin = $server["be_imported_set_admin"];
+
+        if($be_set_admin == null || $be_set_admin == "") {
+            $be_set_admin = "0";
+        }
 
 		if ($this->importGroups) {
 			$ldapbuildgroup = $server['build_group'];
@@ -913,6 +918,7 @@ class tx_euldap_div {
 						$insValues['options'] = '3';
 						$insValues['realname'] = $name;
 						$insValues['fileoper_perms'] = '1';
+                        $insValues['admin'] = $be_set_admin;
 					}
 					$mapArray = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
 					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);			

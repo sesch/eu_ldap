@@ -73,6 +73,8 @@
             <label index="tx_euldap_scheduler.intervalunit"></label>
             <label index="schedulertask.name"></label>
             <label index="schedulertask.description"></label>
+            <label index="tx_euldap_server.be_imported_set_admin"></label>
+            <label index="tx_euldap_server.be_import_default_password"></label>
         </labelContext>
     </meta>
     <data type="array">
@@ -145,6 +147,7 @@
             <label index="tx_euldap_scheduler.intervalunit">Interval</label>
             <label index="schedulertask.name">eu_ldap user import/update</label>
             <label index="schedulertask.description">Imports/updates/deletes users based on LDAP directory</label>
+            <label index="tx_euldap_server.be_imported_set_admin">Set admin for all imported be-users</label>
         </languageKey>
         <languageKey index="dk" type="array">
         </languageKey>
@@ -158,6 +161,7 @@
             <label index="tx_euldap_server.password">Kennwort</label>
             <label index="tx_euldap_server.filter">Filter</label>
             <label index="tx_euldap_server.be_import_default_password">Standardpasswort für importierte Backend-User</label>
+            <label index="tx_euldap_server.be_imported_set_admin">Setze Admin für alle importierten Backend-User</label>
             <label index="tx_euldap_server.build_group">Herleitung der Benutzergruppe (wenn nicht die Standardimplementierung verwendet wird)</label>
             <label index="tx_euldap_server.memberof">Standard verwenden, um Benutzer zu Gruppen zuzuordnen - person:memberOf (AD) / person:groupMembership (NDS) / posixGroup:memberUid (OpenLDAP)</label>
             <label index="tx_euldap_server.only_emailusers">Nur Benutzer mit e-Mail Adresse importieren</label>
